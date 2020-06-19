@@ -1,0 +1,101 @@
+﻿@model IEnumerable<UnityRepositoryPatterns.Models.Book>
+
+@{
+    ViewBag.Title = "Home Page";
+}
+
+
+<link href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+<br />
+<div class="row">
+    <div class="col-md-10 col-lg-offset-1">
+        <button type="button" onclick="getData(1)" class="btn btn-primary">
+            Get All Books
+        </button>
+        <button type="button" onclick="getauthur()" class="btn btn-primary">
+            Get All Authur
+        </button>
+
+        <button type="button" onclick="getData(2)" class="btn btn-info">
+            Get Top 5 Costly Books
+        </button>
+
+        <button type="button" onclick="getData(3)" class="btn btn-danger">
+            Get All Books Of Chetan Bhagat
+        </button>
+
+        <button type="button" onclick="getData(4)" class="btn btn-danger">
+            Get All Books Of J.K. Rowling
+        </button>
+    </div>
+</div>
+
+
+
+<br /> <hr />
+<div class="row">
+    <div class="col-md-10 col-lg-offset-1">
+        <div id="divLoadData">
+            @Html.Partial("LoadData", Model)
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-10 col-lg-offset-1">
+        <div id="divLoadauthor">
+            @*@Html.Partial("Loadauthor", Model)*@
+        </div>
+    </div>
+</div>
+
+
+
+<script src="~/Scripts/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+
+<script>
+    function getauthur() {
+         $.ajax({
+            type: "get",
+            datatype: "json",
+            url: "@Url.Action("Loadauthor", "Home")",
+            data: { author: "" },
+            success: function (data) {
+                $("#divLoadauthor").html(data);
+                $('#example').DataTable();
+            },
+            error: function () {
+                alert("Error while processing");
+            }
+        });
+
+        }
+    function getData(id) {
+        /*
+          1 =  Get All Books
+          2 = Get Top 5 Costly Books
+          3 = Get All Books Of Chetan Bhagat
+          4 = Get All Books Of J.K. Rowling
+          */
+
+        $.ajax({
+            type: "get",
+            datatype: "json",
+            url: "@Url.Action("LoadData", "Home")",
+            data: { BookID: id },
+            success: function (data) {
+                $("#divLoadData").html(data);
+                $('#example').DataTable();
+            },
+            error: function () {
+                alert("Error while processing");
+            }
+        });
+
+    }
+
+    $(document).ready(function () {
+        $('#example').DataTable();
+    });
+</script>

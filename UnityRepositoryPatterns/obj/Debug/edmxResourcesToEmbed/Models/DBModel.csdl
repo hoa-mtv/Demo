@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Models" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="DBEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Authers" EntityType="Models.Auther" />
+    <EntitySet Name="Books" EntityType="Models.Book" />
+    <EntitySet Name="Tags" EntityType="Models.Tag" />
+    <AssociationSet Name="FK_Book_Auther" Association="Models.FK_Book_Auther">
+      <End Role="Auther" EntitySet="Authers" />
+      <End Role="Book" EntitySet="Books" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Book_Tag" Association="Models.FK_Book_Tag">
+      <End Role="Tag" EntitySet="Tags" />
+      <End Role="Book" EntitySet="Books" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Auther">
+    <Key>
+      <PropertyRef Name="AutherID" />
+    </Key>
+    <Property Name="AutherID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="AutherName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Books" Relationship="Models.FK_Book_Auther" FromRole="Auther" ToRole="Book" />
+  </EntityType>
+  <EntityType Name="Book">
+    <Key>
+      <PropertyRef Name="BookID" />
+    </Key>
+    <Property Name="BookID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="BookName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Descrption" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Price" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
+    <Property Name="AutherID" Type="Int64" Nullable="false" />
+    <Property Name="TagID" Type="Int64" Nullable="false" />
+    <NavigationProperty Name="Auther" Relationship="Models.FK_Book_Auther" FromRole="Book" ToRole="Auther" />
+    <NavigationProperty Name="Tag" Relationship="Models.FK_Book_Tag" FromRole="Book" ToRole="Tag" />
+  </EntityType>
+  <EntityType Name="Tag">
+    <Key>
+      <PropertyRef Name="TagID" />
+    </Key>
+    <Property Name="TagID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TagName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Books" Relationship="Models.FK_Book_Tag" FromRole="Tag" ToRole="Book" />
+  </EntityType>
+  <Association Name="FK_Book_Auther">
+    <End Type="Models.Auther" Role="Auther" Multiplicity="1" />
+    <End Type="Models.Book" Role="Book" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Auther">
+        <PropertyRef Name="AutherID" />
+      </Principal>
+      <Dependent Role="Book">
+        <PropertyRef Name="AutherID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Book_Tag">
+    <End Type="Models.Tag" Role="Tag" Multiplicity="1" />
+    <End Type="Models.Book" Role="Book" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tag">
+        <PropertyRef Name="TagID" />
+      </Principal>
+      <Dependent Role="Book">
+        <PropertyRef Name="TagID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
