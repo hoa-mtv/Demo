@@ -4,19 +4,19 @@ using System.Linq;
 using System.Web;
 using UnityRepositoryPatterns.IRepository;
 using UnityRepositoryPatterns.Models;
-
+using UnityRepositoryPatterns.Persistence.Contexts;
 
 namespace UnityRepositoryPatterns.Repository
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly DBEntities db;
+        private readonly BookManageDbContext _bookManageContext;
 
-        public UnitOfWork(DBEntities context)
+        public UnitOfWork(BookManageDbContext context)
         {
-            db = context;
-            abc = new CustomRepository(db);
-            hehe = new AuthorRespository(db);
+            _bookManageContext = context;
+            abc = new CustomRepository(_bookManageContext);
+            hehe = new AuthorRespository(_bookManageContext);
 
         }
 
@@ -27,12 +27,12 @@ namespace UnityRepositoryPatterns.Repository
 
         public int SaveChanges()
         {
-            return db.SaveChanges();
+            return _bookManageContext.SaveChanges();
         }
 
         public void Dispose()
         {
-            db.Dispose();
+            _bookManageContext.Dispose();
         }
     }
 }

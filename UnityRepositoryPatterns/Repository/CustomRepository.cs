@@ -5,29 +5,31 @@ using System.Linq.Expressions;
 using System.Web;
 using UnityRepositoryPatterns.IRepository;
 using UnityRepositoryPatterns.Models;
+using UnityRepositoryPatterns.Persistence.Contexts;
+using UnityRepositoryPatterns.Repository.Common;
 
 namespace UnityRepositoryPatterns.Repository
 {
-    public class CustomRepository : Repository<Book>, ICustomRepository
+    public class CustomRepository : BaseRepository, ICustomRepository
     {
 
-        public CustomRepository(DBEntities context) : base(context)
+        public CustomRepository(BookManageDbContext context) : base(context)
         {
         }
 
-        public DBEntities DBEntities
-        {
-            get { return db as DBEntities; }
-        }
+        //public DBEntities DBEntities
+        //{
+        //    get { return db as DBEntities; }
+        //}
 
         public IEnumerable<Book> GetTop5CostlyBook()
         {
-            return DBEntities.Books.OrderByDescending(s => s.Price).Take(5).ToList();
+            return _context.Books.OrderByDescending(s => s.Price).Take(5).ToList();
         }
 
         public IEnumerable<Book> GetBookAutherWise(long AutherID)
         {
-            return DBEntities.Books.Where(s => s.AutherID == AutherID).ToList();
+            return _context.Books.Where(s => s.AutherID == AutherID).ToList();
         }
     }
 }

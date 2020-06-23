@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using UnityRepositoryPatterns.IRepository;
 using UnityRepositoryPatterns.Models;
 using UnityRepositoryPatterns.Repository;
 
@@ -13,22 +14,24 @@ namespace UnityRepositoryPatterns.Controllers
 {
     public class AuthersController : Controller
     {
-        private DBEntities db = new DBEntities();
-
+        private readonly IAuthurResponsitory _authurResponsitory;
+        private readonly IUnitOfWork _unitOfWork;
         // GET: Authers
         public ActionResult Index()
         {
-            return View(db.Authers.ToList());
+            //return View(_authurResponsitory.Authers.ToList());
+            return View(_authurResponsitory.getlist());
         }
 
         // GET: Authers/Details/5
-        public ActionResult Details(long? id)
+        public ActionResult Details(long id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Auther auther = db.Authers.Find(id);
+            //Auther auther = db.Authers.Find(id);
+            Auther auther = _authurResponsitory.FindAutherById(id);
             if (auther == null)
             {
                 return HttpNotFound();
@@ -53,8 +56,8 @@ namespace UnityRepositoryPatterns.Controllers
             //list_au.AutherName = "";
             if (ModelState.IsValid)
             {
-                db.Authers.Add(model);
-                db.SaveChanges();
+                //db.Authers.Add(model);
+                //db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
@@ -62,13 +65,14 @@ namespace UnityRepositoryPatterns.Controllers
         }
 
         // GET: Authers/Edit/5
-        public ActionResult Edit(long? id)
+        public ActionResult Edit(long id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Auther auther = db.Authers.Find(id);
+            //Auther auther = db.Authers.Find(id);
+            Auther auther = _authurResponsitory.FindAutherById(id);
             if (auther == null)
             {
                 return HttpNotFound();
@@ -85,21 +89,22 @@ namespace UnityRepositoryPatterns.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(auther).State = EntityState.Modified;
-                db.SaveChanges();
+                //db.Entry(auther).State = EntityState.Modified;
+                //db.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View(auther);
         }
 
         // GET: Authers/Delete/5
-        public ActionResult Delete(long? id)
+        public ActionResult Delete(long id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Auther auther = db.Authers.Find(id);
+            //Auther auther = db.Authers.Find(id);
+            Auther auther = _authurResponsitory.FindAutherById(id);
             if (auther == null)
             {
                 return HttpNotFound();
@@ -112,9 +117,11 @@ namespace UnityRepositoryPatterns.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(long id)
         {
-            Auther auther = db.Authers.Find(id);
-            db.Authers.Remove(auther);
-            db.SaveChanges();
+            //Auther auther = db.Authers.Find(id);
+            //db.Authers.Remove(auther);
+            //db.SaveChanges();
+            _authurResponsitory.DeleteAutherById(id);
+            _unitOfWork.SaveChanges();
             return RedirectToAction("Index");
         }
 
@@ -122,7 +129,7 @@ namespace UnityRepositoryPatterns.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                _unitOfWork.Dispose();
             }
             base.Dispose(disposing);
         }

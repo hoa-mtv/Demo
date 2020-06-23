@@ -7,7 +7,8 @@ using UnityRepositoryPatterns.Models;
 
 namespace UnityRepositoryPatterns.IRepository
 {
-    public interface ICustomRepository : IRepository<Book>
+    //public interface ICustomRepository : IRepository<Book>
+    public interface ICustomRepository
     {      
         IEnumerable<Book> GetTop5CostlyBook();
 
