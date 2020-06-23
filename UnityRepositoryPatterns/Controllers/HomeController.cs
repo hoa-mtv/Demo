@@ -14,8 +14,6 @@ namespace UnityRepositoryPatterns.Controllers
     public class HomeController : Controller
     {
         //UnitOfWork a = new UnitOfWork(new DBEntities());
-        //UnitOfWork a = new UnitOfWork(BookManageDbContext context);
-        //private readonly IUnitOfWork _unitOfWork;
 
         private readonly IAuthurResponsitory _authurResponsitory;
         private readonly ICustomRepository _customRepository;
@@ -53,7 +51,7 @@ namespace UnityRepositoryPatterns.Controllers
             {
                 ModelState.AddModelError("DateEncaissement", "The DateEncaissement must be set");
             }
-            
+
             //List<Auther> list = new List<Auther>();
             var list = _authurResponsitory.getlist();
             //DataTable dt = _authurResponsitory.getdb();

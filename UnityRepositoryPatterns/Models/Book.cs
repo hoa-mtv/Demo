@@ -14,5 +14,6 @@ namespace UnityRepositoryPatterns.Models
         public long AutherID { get; set; }
         public long TagID { get; set; }
         public string test { get; set; }
+        public string AddNew { get; set; }
     }
 }
